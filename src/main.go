@@ -2,18 +2,22 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 )
 
 func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to Formula API!")\
+	fmt.Fprintf(w, "Welcome to Formula API!")
 	fmt.Println("Endpoint hit: homePage")
 }
 
 func handleRequests() {
-	http.HandleFunc("/", homePage)
-	log.Fatal(http.ListenAndServe(":10000", nil))
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/", homePage)
+
+	if err := http.ListenAndServe(":10000", mux); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 func main() {
