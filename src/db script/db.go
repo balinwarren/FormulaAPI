@@ -56,6 +56,10 @@ func main() {
 	}
 	fmt.Println("Pinged your deployment. You successfully connected to MongoDB!")
 
+	driverCollection := client.Database("formulaone").Collection("drivers")
+	//constructorCollection := client.Database("formulaone").Collection("constructors")
+	//circuitCollection := client.Database("formulaone").Collection("circuits")
+
 	//read spreadsheet
 	f, err := excelize.OpenFile("Formula 1 Grid.xlsx")
 	if err != nil {
@@ -131,8 +135,12 @@ func main() {
 			}
 		}
 		fmt.Print(tempDriver)
-		// TO DO //
-		// ADD ALL DRIVER STRUCTS AS DOCUMENTS TO MONGO DB //
+
+		result, err := driverCollection.InsertOne(context.TODO(), tempDriver)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("\nInserted document with _id: %v", result.InsertedID)
 		fmt.Println()
 	}
 
