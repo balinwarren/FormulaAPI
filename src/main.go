@@ -45,11 +45,13 @@ func main() {
 	//start api
 	mux := http.NewServeMux()
 
+	//homePage endpoint
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Welcome to Formula API!")
 		fmt.Println("Endpoint hit: homePage")
 	})
 
+	//all drivers endpoint
 	mux.HandleFunc("GET /driver", func(w http.ResponseWriter, r *http.Request) {
 		cursor, err := driverCollection.Find(context.TODO(), bson.M{})
 		if err != nil {
