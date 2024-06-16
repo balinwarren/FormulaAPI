@@ -123,6 +123,31 @@ func main() {
 		}
 	})
 
+	//individual diver information endpoint
+	mux.HandleFunc("GET /drivers/{lastName}/{firstName}", func(w http.ResponseWriter, r *http.Request) {
+		firstName := r.PathValue("firstName")
+		lastName := r.PathValue("lastName")
+
+		cursor, err := driverCollection.Find(context.TODO(), bson.M{"firstName": firstName, "lastName": lastName})
+		if err != nil {
+			panic(err)
+		}
+		var drivers []bson.M
+		if err = cursor.All(context.TODO(), &drivers); err != nil {
+			panic(err)
+		}
+		fmt.Fprintf(w, "Return all drivers with name %v %v\n", firstName, lastName)
+		fmt.Printf("Endpoint hit: all drivers with name %v %v\n", firstName, lastName)
+		for _, driver := range drivers {
+			jsonBytes, err := json.MarshalIndent(driver, "", "   ")
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Fprintf(w, "%s\n\n", string(jsonBytes))
+		}
+	})
+
 	if err := http.ListenAndServe(":10000", mux); err != nil {
 		fmt.Println(err.Error())
 	}
