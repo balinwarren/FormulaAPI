@@ -75,7 +75,7 @@ func main() {
 	})
 
 	//all drivers endpoint
-	mux.HandleFunc("GET /driver", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /drivers", func(w http.ResponseWriter, r *http.Request) {
 		cursor, err := driverCollection.Find(context.TODO(), bson.M{})
 		if err != nil {
 			panic(err)
@@ -97,7 +97,7 @@ func main() {
 	})
 
 	//all drivers by year endpoint
-	mux.HandleFunc("GET /{year}/drivers", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /drivers/year/{year}", func(w http.ResponseWriter, r *http.Request) {
 		year, err := strconv.Atoi(r.PathValue("year"))
 		if err != nil {
 			panic(err)
@@ -124,7 +124,7 @@ func main() {
 	})
 
 	//individual diver information endpoint
-	mux.HandleFunc("GET /drivers/{lastName}/{firstName}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /drivers/name/{lastName}/{firstName}", func(w http.ResponseWriter, r *http.Request) {
 		firstName := r.PathValue("firstName")
 		lastName := r.PathValue("lastName")
 
@@ -138,6 +138,30 @@ func main() {
 		}
 		fmt.Fprintf(w, "Return all drivers with name %v %v\n", firstName, lastName)
 		fmt.Printf("Endpoint hit: all drivers with name %v %v\n", firstName, lastName)
+		for _, driver := range drivers {
+			jsonBytes, err := json.MarshalIndent(driver, "", "   ")
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Fprintf(w, "%s\n\n", string(jsonBytes))
+		}
+	})
+
+	//all driver by last name endpoint
+	mux.HandleFunc("GET /drivers/name/{lastName}", func(w http.ResponseWriter, r *http.Request) {
+		lastName := r.PathValue("lastName")
+
+		cursor, err := driverCollection.Find(context.TODO(), bson.M{"lastName": lastName})
+		if err != nil {
+			panic(err)
+		}
+		var drivers []bson.M
+		if err = cursor.All(context.TODO(), &drivers); err != nil {
+			panic(err)
+		}
+		fmt.Fprintf(w, "Return all drivers with last name %v\n", lastName)
+		fmt.Printf("Endpoint hit: all drivers with last name %v\n", lastName)
 		for _, driver := range drivers {
 			jsonBytes, err := json.MarshalIndent(driver, "", "   ")
 			if err != nil {
