@@ -7,7 +7,8 @@ import (
 )
 
 func convertJSON(dataMap bson.M) string {
-	jsonBytes, err := json.MarshalIndent(dataMap, "", "   ")
+	data := reorderDriverMap(dataMap)
+	jsonBytes, err := json.MarshalIndent(data, "", "   ")
 	if err != nil {
 		panic(err)
 	}
