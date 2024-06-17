@@ -2,37 +2,15 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/gofor-little/env"
 	"go.mongodb.org/mongo-driver/bson"
-
-	//"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-/*type Driver struct {
-	_id         primitive.ObjectID `json:"_id"`
-	firstName   string	`json:"first_name"`
-	lastName    string	`json:"last_name"`
-	dateOfBirth string	`json:"date_of_birth"`
-	dateofDeath string	`json:"date_of_death"`
-	nationality string
-	teamsRaced  []string
-	yearsActive []int
-	raceStarts  int
-	wdc         int
-	wins        int
-	podiums     int
-	points      int
-	uniqueGpWon []string
-	active      bool
-	carNumber   string
-}*/
 
 func main() {
 	//load env
@@ -87,12 +65,7 @@ func main() {
 		fmt.Fprintf(w, "Return all drivers\n")
 		fmt.Println("Endpoint hit: all drivers")
 		for _, driver := range drivers {
-			jsonBytes, err := json.MarshalIndent(driver, "", "   ")
-			if err != nil {
-				panic(err)
-			}
-
-			fmt.Fprintf(w, "%s\n\n", string(jsonBytes))
+			fmt.Fprintf(w, "%s\n\n", convertJSON(driver))
 		}
 	})
 
@@ -114,12 +87,7 @@ func main() {
 		fmt.Fprintf(w, "Return all drivers active in year %v\n", year)
 		fmt.Printf("Endpoint hit: all drivers in year %v\n", year)
 		for _, driver := range drivers {
-			jsonBytes, err := json.MarshalIndent(driver, "", "   ")
-			if err != nil {
-				panic(err)
-			}
-
-			fmt.Fprintf(w, "%s\n\n", string(jsonBytes))
+			fmt.Fprintf(w, "%s\n\n", convertJSON(driver))
 		}
 	})
 
@@ -139,12 +107,7 @@ func main() {
 		fmt.Fprintf(w, "Return all drivers with name %v %v\n", firstName, lastName)
 		fmt.Printf("Endpoint hit: all drivers with name %v %v\n", firstName, lastName)
 		for _, driver := range drivers {
-			jsonBytes, err := json.MarshalIndent(driver, "", "   ")
-			if err != nil {
-				panic(err)
-			}
-
-			fmt.Fprintf(w, "%s\n\n", string(jsonBytes))
+			fmt.Fprintf(w, "%s\n\n", convertJSON(driver))
 		}
 	})
 
@@ -163,12 +126,7 @@ func main() {
 		fmt.Fprintf(w, "Return all drivers with last name %v\n", lastName)
 		fmt.Printf("Endpoint hit: all drivers with last name %v\n", lastName)
 		for _, driver := range drivers {
-			jsonBytes, err := json.MarshalIndent(driver, "", "   ")
-			if err != nil {
-				panic(err)
-			}
-
-			fmt.Fprintf(w, "%s\n\n", string(jsonBytes))
+			fmt.Fprintf(w, "%s\n\n", convertJSON(driver))
 		}
 	})
 
