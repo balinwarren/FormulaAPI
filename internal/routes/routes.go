@@ -15,6 +15,7 @@ func Router() *http.ServeMux {
 	mux.HandleFunc("GET /drivers/name/{lastName}/{firstName}", getDriverByFullName)
 	mux.HandleFunc("GET /drivers/name/{lastName}", getDriversByLastName)
 	mux.HandleFunc("GET /drivers/wdcs", getAllWDCs)
+	mux.HandleFunc("GET /drivers/winners", getAllGpWinners)
 
 	return mux
 }

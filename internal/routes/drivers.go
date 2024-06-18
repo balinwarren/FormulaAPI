@@ -121,7 +121,29 @@ func getAllWDCs(w http.ResponseWriter, r *http.Request) {
 	if err = cursor.All(context.TODO(), &drivers); err != nil {
 		panic(err)
 	}
-	fmt.Printf("Endpoint hit: all world drivers champions\n")
+	fmt.Printf("Endpoint hit: all World Drivers Champions\n")
+	for _, driver := range drivers {
+		fmt.Fprintf(w, "%s\n\n", json.ConvertJSON(driver))
+	}
+
+	data.CloseConnection(client, err)
+}
+
+func getAllGpWinners(w http.ResponseWriter, r *http.Request) {
+	driverCollection, client, collectionErr := data.GetCollection("drivers")
+	if collectionErr != nil {
+		panic(collectionErr)
+	}
+
+	cursor, err := driverCollection.Find(context.TODO(), bson.D{{Key: "wins", Value: bson.D{{Key: "$gt", Value: 0}}}})
+	if err != nil {
+		panic(err)
+	}
+	var drivers []bson.M
+	if err = cursor.All(context.TODO(), &drivers); err != nil {
+		panic(err)
+	}
+	fmt.Printf("Endpoint hit: all Grand Prix winners\n")
 	for _, driver := range drivers {
 		fmt.Fprintf(w, "%s\n\n", json.ConvertJSON(driver))
 	}
