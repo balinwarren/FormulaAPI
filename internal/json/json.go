@@ -25,7 +25,7 @@ type Driver struct {
 	Unique_Gp_Won interface{} `json:"unique_gp_won"`
 }
 
-func reorderDriverMap(dataMap bson.M) Driver {
+func ReorderDriverMap(dataMap bson.M) Driver {
 	m := Driver{
 		ID:            dataMap["_id"],
 		First_Name:    dataMap["firstName"],
@@ -48,9 +48,9 @@ func reorderDriverMap(dataMap bson.M) Driver {
 	return m
 }
 
-func ConvertJSON(dataMap bson.M) string {
-	data := reorderDriverMap(dataMap)
-	jsonBytes, err := json.MarshalIndent(data, "", "   ")
+func ConvertJSON(dataArr []Driver) string {
+
+	jsonBytes, err := json.MarshalIndent(dataArr, "", "   ")
 	if err != nil {
 		panic(err)
 	}
