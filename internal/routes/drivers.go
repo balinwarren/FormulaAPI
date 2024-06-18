@@ -6,11 +6,16 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/balinwarren/FormulaAPI/internal/data"
 	"github.com/balinwarren/FormulaAPI/internal/json"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 func getAllDrivers(w http.ResponseWriter, r *http.Request) {
+	driverCollection, client, collectionErr := data.GetCollection("drivers")
+	if collectionErr != nil {
+		panic(collectionErr)
+	}
 	cursor, err := driverCollection.Find(context.TODO(), bson.M{})
 	if err != nil {
 		panic(err)
@@ -24,9 +29,15 @@ func getAllDrivers(w http.ResponseWriter, r *http.Request) {
 	for _, driver := range drivers {
 		fmt.Fprintf(w, "%s\n\n", json.ConvertJSON(driver))
 	}
+
+	data.CloseConnection(client, err)
 }
 
 func getDriversByYear(w http.ResponseWriter, r *http.Request) {
+	driverCollection, client, collectionErr := data.GetCollection("drivers")
+	if collectionErr != nil {
+		panic(collectionErr)
+	}
 	year, err := strconv.Atoi(r.PathValue("year"))
 	if err != nil {
 		panic(err)
@@ -45,9 +56,15 @@ func getDriversByYear(w http.ResponseWriter, r *http.Request) {
 	for _, driver := range drivers {
 		fmt.Fprintf(w, "%s\n\n", json.ConvertJSON(driver))
 	}
+
+	data.CloseConnection(client, err)
 }
 
 func getDriverByFullName(w http.ResponseWriter, r *http.Request) {
+	driverCollection, client, collectionErr := data.GetCollection("drivers")
+	if collectionErr != nil {
+		panic(collectionErr)
+	}
 	firstName := r.PathValue("firstName")
 	lastName := r.PathValue("lastName")
 
@@ -64,9 +81,16 @@ func getDriverByFullName(w http.ResponseWriter, r *http.Request) {
 	for _, driver := range drivers {
 		fmt.Fprintf(w, "%s\n\n", json.ConvertJSON(driver))
 	}
+
+	data.CloseConnection(client, err)
 }
 
 func getDriversByLastName(w http.ResponseWriter, r *http.Request) {
+	driverCollection, client, collectionErr := data.GetCollection("drivers")
+	if collectionErr != nil {
+		panic(collectionErr)
+	}
+
 	lastName := r.PathValue("lastName")
 
 	cursor, err := driverCollection.Find(context.TODO(), bson.M{"lastName": lastName})
@@ -82,4 +106,6 @@ func getDriversByLastName(w http.ResponseWriter, r *http.Request) {
 	for _, driver := range drivers {
 		fmt.Fprintf(w, "%s\n\n", json.ConvertJSON(driver))
 	}
+
+	data.CloseConnection(client, err)
 }

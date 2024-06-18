@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func getClient() *mongo.Client {
+func getClient() (*mongo.Client, error) {
 	//load env
 	if err := env.Load("cmd/FormulaAPI/.env"); err != nil {
 		panic(err)
@@ -26,21 +26,26 @@ func getClient() *mongo.Client {
 	if err != nil {
 		panic(err)
 	}
-	defer func() {
-		if err = client.Disconnect(context.TODO()); err != nil {
-			panic(err)
-		}
-	}()
 
 	var result bson.M
 	if err := client.Database("admin").RunCommand(context.TODO(), bson.D{{Key: "ping", Value: 1}}).Decode(&result); err != nil {
 		panic(err)
 	}
 
-	return client
+	return client, err
 }
 
-func GetCollection(collectionName string) *mongo.Collection {
-	client := getClient()
-	return client.Database("formulaone").Collection(collectionName)
+func GetCollection(collectionName string) (*mongo.Collection, *mongo.Client, error) {
+	client, err := getClient()
+	return client.Database("formulaone").Collection(collectionName), client, err
+}
+
+func CloseConnection(client *mongo.Client, err error) {
+	if err != nil {
+		panic(err)
+	}
+
+	if err = client.Disconnect(context.TODO()); err != nil {
+		panic(err)
+	}
 }
