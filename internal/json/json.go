@@ -1,6 +1,8 @@
-package main
+package json
 
 import (
+	"encoding/json"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -44,4 +46,14 @@ func reorderDriverMap(dataMap bson.M) Driver {
 	}
 
 	return m
+}
+
+func ConvertJSON(dataMap bson.M) string {
+	data := reorderDriverMap(dataMap)
+	jsonBytes, err := json.MarshalIndent(data, "", "   ")
+	if err != nil {
+		panic(err)
+	}
+
+	return string(jsonBytes)
 }

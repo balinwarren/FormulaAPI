@@ -1,4 +1,4 @@
-module example/FormulaAPI
+module github.com/balinwarren/FormulaAPI
 
 go 1.22.4
 

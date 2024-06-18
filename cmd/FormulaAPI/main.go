@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/balinwarren/FormulaAPI/internal/json"
 	"github.com/gofor-little/env"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -14,7 +15,7 @@ import (
 
 func main() {
 	//load env
-	if err := env.Load("src/.env"); err != nil {
+	if err := env.Load("cmd/FormulaAPI/.env"); err != nil {
 		panic(err)
 	}
 
@@ -65,7 +66,7 @@ func main() {
 		fmt.Fprintf(w, "Return all drivers\n")
 		fmt.Println("Endpoint hit: all drivers")
 		for _, driver := range drivers {
-			fmt.Fprintf(w, "%s\n\n", convertJSON(driver))
+			fmt.Fprintf(w, "%s\n\n", json.ConvertJSON(driver))
 		}
 	})
 
@@ -87,7 +88,7 @@ func main() {
 		fmt.Fprintf(w, "Return all drivers active in year %v\n", year)
 		fmt.Printf("Endpoint hit: all drivers in year %v\n", year)
 		for _, driver := range drivers {
-			fmt.Fprintf(w, "%s\n\n", convertJSON(driver))
+			fmt.Fprintf(w, "%s\n\n", json.ConvertJSON(driver))
 		}
 	})
 
@@ -107,7 +108,7 @@ func main() {
 		fmt.Fprintf(w, "Return all drivers with name %v %v\n", firstName, lastName)
 		fmt.Printf("Endpoint hit: all drivers with name %v %v\n", firstName, lastName)
 		for _, driver := range drivers {
-			fmt.Fprintf(w, "%s\n\n", convertJSON(driver))
+			fmt.Fprintf(w, "%s\n\n", json.ConvertJSON(driver))
 		}
 	})
 
@@ -126,7 +127,7 @@ func main() {
 		fmt.Fprintf(w, "Return all drivers with last name %v\n", lastName)
 		fmt.Printf("Endpoint hit: all drivers with last name %v\n", lastName)
 		for _, driver := range drivers {
-			fmt.Fprintf(w, "%s\n\n", convertJSON(driver))
+			fmt.Fprintf(w, "%s\n\n", json.ConvertJSON(driver))
 		}
 	})
 
