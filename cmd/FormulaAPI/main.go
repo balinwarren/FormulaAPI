@@ -13,7 +13,7 @@ func main() {
 	port := os.Getenv("PORT")
 	mux := routes.Router()
 
-	if err := http.ListenAndServe(port, mux); err != nil {
+	if err := http.ListenAndServe("0.0.0.0"+port, mux); err != nil {
 		fmt.Println(err.Error())
 	}
 }
