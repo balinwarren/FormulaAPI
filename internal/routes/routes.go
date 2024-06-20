@@ -9,13 +9,13 @@ func Router() *http.ServeMux {
 	mux := http.NewServeMux()
 
 	//endpoint routes
-	mux.HandleFunc("/", homePage)
-	mux.HandleFunc("GET /drivers", getAllDrivers)
-	mux.HandleFunc("GET /drivers/year/{year}", getDriversByYear)
-	mux.HandleFunc("GET /drivers/name/{lastName}/{firstName}", getDriverByFullName)
-	mux.HandleFunc("GET /drivers/name/{lastName}", getDriversByLastName)
-	mux.HandleFunc("GET /drivers/wdcs", getAllWDCs)
-	mux.HandleFunc("GET /drivers/winners", getAllGpWinners)
+	mux.HandleFunc("/api", homePage)
+	mux.HandleFunc("GET /api/drivers", getAllDrivers)
+	mux.HandleFunc("GET /api/drivers/year/{year}", getDriversByYear)
+	mux.HandleFunc("GET /api/drivers/name/{lastName}/{firstName}", getDriverByFullName)
+	mux.HandleFunc("GET /api/drivers/name/{lastName}", getDriversByLastName)
+	mux.HandleFunc("GET /api/drivers/wdcs", getAllWDCs)
+	mux.HandleFunc("GET /api/drivers/winners", getAllGpWinners)
 
 	return mux
 }
