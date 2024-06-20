@@ -11,7 +11,7 @@ import (
 
 func getClient() (*mongo.Client, error) {
 	//load env
-	if err := env.Load("cmd/FormulaAPI/.env"); err != nil {
+	if err := env.Load(".env"); err != nil {
 		panic(err)
 	}
 
