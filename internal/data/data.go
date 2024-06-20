@@ -2,8 +2,9 @@ package data
 
 import (
 	"context"
+	"os"
 
-	"github.com/gofor-little/env"
+	//"github.com/gofor-little/env"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -11,11 +12,12 @@ import (
 
 func getClient() (*mongo.Client, error) {
 	//load env
-	if err := env.Load(".env"); err != nil {
-		panic(err)
-	}
+	//if err := env.Load(".env"); err != nil {
+	//	panic(err)
+	//}
 
-	dbUri := env.Get("DB_URI", "")
+	//dbUri := env.Get("DB_URI", "")
+	dbUri := os.Getenv("DB_URI")
 
 	//mongo connection
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
