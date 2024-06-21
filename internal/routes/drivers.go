@@ -12,10 +12,8 @@ import (
 )
 
 func getAllDrivers(w http.ResponseWriter, r *http.Request) {
-	driverCollection, client, collectionErr := data.GetCollection("drivers")
-	if collectionErr != nil {
-		panic(collectionErr)
-	}
+	driverCollection := data.GetCollection("drivers")
+
 	cursor, err := driverCollection.Find(context.TODO(), bson.M{})
 	if err != nil {
 		panic(err)
@@ -31,15 +29,11 @@ func getAllDrivers(w http.ResponseWriter, r *http.Request) {
 		result = append(result, json.ReorderDriverMap(driver))
 	}
 	fmt.Fprintf(w, "%v\n\n", json.ConvertJSON(result))
-
-	data.CloseConnection(client, err)
 }
 
 func getDriversByYear(w http.ResponseWriter, r *http.Request) {
-	driverCollection, client, collectionErr := data.GetCollection("drivers")
-	if collectionErr != nil {
-		panic(collectionErr)
-	}
+	driverCollection := data.GetCollection("drivers")
+
 	year, err := strconv.Atoi(r.PathValue("year"))
 	if err != nil {
 		panic(err)
@@ -60,15 +54,11 @@ func getDriversByYear(w http.ResponseWriter, r *http.Request) {
 		result = append(result, json.ReorderDriverMap(driver))
 	}
 	fmt.Fprintf(w, "%v\n\n", json.ConvertJSON(result))
-
-	data.CloseConnection(client, err)
 }
 
 func getDriverByFullName(w http.ResponseWriter, r *http.Request) {
-	driverCollection, client, collectionErr := data.GetCollection("drivers")
-	if collectionErr != nil {
-		panic(collectionErr)
-	}
+	driverCollection := data.GetCollection("drivers")
+
 	firstName := r.PathValue("firstName")
 	lastName := r.PathValue("lastName")
 
@@ -87,15 +77,10 @@ func getDriverByFullName(w http.ResponseWriter, r *http.Request) {
 		result = append(result, json.ReorderDriverMap(driver))
 	}
 	fmt.Fprintf(w, "%v\n\n", json.ConvertJSON(result))
-
-	data.CloseConnection(client, err)
 }
 
 func getDriversByLastName(w http.ResponseWriter, r *http.Request) {
-	driverCollection, client, collectionErr := data.GetCollection("drivers")
-	if collectionErr != nil {
-		panic(collectionErr)
-	}
+	driverCollection := data.GetCollection("drivers")
 
 	lastName := r.PathValue("lastName")
 
@@ -114,15 +99,10 @@ func getDriversByLastName(w http.ResponseWriter, r *http.Request) {
 		result = append(result, json.ReorderDriverMap(driver))
 	}
 	fmt.Fprintf(w, "%v\n\n", json.ConvertJSON(result))
-
-	data.CloseConnection(client, err)
 }
 
 func getAllWDCs(w http.ResponseWriter, r *http.Request) {
-	driverCollection, client, collectionErr := data.GetCollection("drivers")
-	if collectionErr != nil {
-		panic(collectionErr)
-	}
+	driverCollection := data.GetCollection("drivers")
 
 	cursor, err := driverCollection.Find(context.TODO(), bson.D{{Key: "wdcs", Value: bson.D{{Key: "$gt", Value: 0}}}})
 	if err != nil {
@@ -139,15 +119,10 @@ func getAllWDCs(w http.ResponseWriter, r *http.Request) {
 		result = append(result, json.ReorderDriverMap(driver))
 	}
 	fmt.Fprintf(w, "%v\n\n", json.ConvertJSON(result))
-
-	data.CloseConnection(client, err)
 }
 
 func getAllGpWinners(w http.ResponseWriter, r *http.Request) {
-	driverCollection, client, collectionErr := data.GetCollection("drivers")
-	if collectionErr != nil {
-		panic(collectionErr)
-	}
+	driverCollection := data.GetCollection("drivers")
 
 	cursor, err := driverCollection.Find(context.TODO(), bson.D{{Key: "wins", Value: bson.D{{Key: "$gt", Value: 0}}}})
 	if err != nil {
@@ -164,6 +139,4 @@ func getAllGpWinners(w http.ResponseWriter, r *http.Request) {
 		result = append(result, json.ReorderDriverMap(driver))
 	}
 	fmt.Fprintf(w, "%v\n\n", json.ConvertJSON(result))
-
-	data.CloseConnection(client, err)
 }

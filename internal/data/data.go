@@ -10,7 +10,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func getClient() (*mongo.Client, error) {
+var Client *mongo.Client
+var ClientErr error
+
+func GetClient() (*mongo.Client, error) {
 	//load env
 	//if err := env.Load(".env"); err != nil {
 	//	panic(err)
@@ -37,9 +40,8 @@ func getClient() (*mongo.Client, error) {
 	return client, err
 }
 
-func GetCollection(collectionName string) (*mongo.Collection, *mongo.Client, error) {
-	client, err := getClient()
-	return client.Database("formulaone").Collection(collectionName), client, err
+func GetCollection(collectionName string) *mongo.Collection {
+	return Client.Database("formulaone").Collection(collectionName)
 }
 
 func CloseConnection(client *mongo.Client, err error) {
